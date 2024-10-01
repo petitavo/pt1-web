@@ -1,7 +1,8 @@
 <script>
 import { MentalStateExamService } from "../services/mental-state-exam.service.js";
-import { ExaminersService} from "../services/examiners.service.js";
+import { ExaminersService } from "../services/examiners.service.js";
 import { Mental } from "../model/mental-state-exam.entity.js";
+import { Examiner } from "../model/examiners.entity.js";
 
 export default {
   name: "examiner-performance-overview",
@@ -17,7 +18,6 @@ export default {
     //#region Computed Properties
     examinerPerformance() {
       return this.examiners.map(examiner => {
-        // Filtra los exámenes por examinerId
         const exams = this.mentalStateExams.filter(exam => exam.examinerId === examiner.id);
 
         const totalScore = exams.reduce((sum, exam) =>
@@ -37,19 +37,17 @@ export default {
     }
     //#endregion
   },
+  //#region Lifecycle Hooks
   created() {
-    //#region Lifecycle Hooks
     this.mentalStateExamService = new MentalStateExamService();
     this.examinerService = new ExaminersService();
 
-    // Cargar los datos de los exámenes
     this.mentalStateExamService.getAll().then(response => {
       this.mentalStateExams = response.data.map(exam => new Mental(exam));
     }).catch(error => console.error(error));
 
-    // Cargar los datos de los examinadores
     this.examinerService.getAll().then(response => {
-      this.examiners = response.data;
+      this.examiners = response.data.map(examinerData => new Examiner(examinerData));
     }).catch(error => console.error(error));
   }
   //#endregion
@@ -75,7 +73,7 @@ export default {
             <template #content>
               <div>
                 <p><strong>Assigned Mental State Exam Count:</strong> {{ performance.examCount }}</p>
-                <p><strong>Average Total Score:</strong> {{ performance.averageScore }}</p>
+                <p><strong>Average Total Score:</strong> {{ performance.averageScore.toFixed(2) }}</p>
               </div>
             </template>
           </pv-card>

@@ -1,31 +1,30 @@
 import http from "../../shared/services/http-common.js";
 
-export class  MentalStateExamService{
+/**
+ * Mental State Exam Service
+ * @class MentalStateExamService
+ * @description
+ * Provides a service to interact with mental state exam data from the API.
+ * It contains the following properties:
+ * @property {string} resourceEndpoint - The API endpoint for mental state exams
+ * It contains the following methods:
+ * @method getAll - Gets all mental state exams
+ */
+export class MentalStateExamService {
+    /**
+     * API endpoint for mental state exams
+     * @type {string}
+     */
     resourceEndpoint = '/mental-state-exams';
 
+    /**
+     * Gets all mental state exams
+     * @returns {Promise<axios.AxiosResponse<any>>} - The mental state exams data
+     * @method getAll
+     */
     getAll() {
         console.log(http.defaults.baseURL);
         console.log(this.resourceEndpoint);
         return http.get(this.resourceEndpoint);
-    }
-
-    getById(id) {
-        return http.get(`${this.resourceEndpoint}/${id}`);
-    }
-
-    create(mentalStateExamResource) {
-        return http.post(this.resourceEndpoint, mentalStateExamResource);
-    }
-
-    update(id, mentalStateExamResource) {
-        return http.put(`${this.resourceEndpoint}/${id}`, mentalStateExamResource);
-    }
-
-    delete(id) {
-        return http.delete(`${this.resourceEndpoint}/${id}`);
-    }
-
-    findByName(name) {
-        return http.get(`${this.resourceEndpoint}?name=${name}`);
     }
 }
